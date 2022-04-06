@@ -1,0 +1,30 @@
+version: "3"
+services:
+  backend:
+    build: ./backend
+    command: bash -c "python manage.py migrate && python manage.py collectstatic --no-input --clear && gunicorn --workers 3  --bind  0.0.0.0:8000 project.wsgi:application"
+    expose:
+      - "8000"
+    volumes:
+      - static:/usr/src/app/static_root
+      - media:/usr/src/app/media
+    environment:
+      - ALLOWED_HOSTS=127.0.0.1
+      - SUPERUSER_NAME=admin
+      - SUPERUSER_PASSWORD=admin123
+      - DJANGO_SETTINGS_MODULE=project.pro_settings
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - AXIOS_BASEURL=http://backend:8000/api
+        - AXIOS_BROWSER_BASEURL=/api
+    expose:
+      - "3000"
+    command: "yarn start"
+    environment:
+      - AXIOS_BASEURL=http://backend:8000/api
+      - AXIOS_BROWSER_BASEURL=/api

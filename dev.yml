@@ -1,0 +1,30 @@
+version: "3"
+services:
+  backend:
+    build: ./backend
+    command: bash -c "python manage.py migrate && python manage.py collectstatic --no-input --clear && python manage.py runserver  0.0.0.0:8000"
+    expose:
+      - "8000"
+    volumes:
+      - ./backend:/usr/src/app
+      - static:/usr/src/app/static_root
+      - media:/usr/src/app/media
+    environment:
+      - SUPERUSER_NAME=admin
+      - SUPERUSER_PASSWORD=admin123
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - AXIOS_BASEURL=http://backend:8000/api
+        - AXIOS_BROWSER_BASEURL=/api
+    expose:
+      - "3000"
+    command: "yarn dev"
+    environment:
+      - AXIOS_BASEURL=http://backend:8000/api
+      - AXIOS_BROWSER_BASEURL=/api
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules

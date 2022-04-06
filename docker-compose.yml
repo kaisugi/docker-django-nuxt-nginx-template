@@ -1,0 +1,27 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx:1.13
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx_conf:/etc/nginx/conf.d
+      - static:/usr/src/app/static_root
+      - media:/usr/src/app/media
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  static:
+  media:
+  pgdata:
