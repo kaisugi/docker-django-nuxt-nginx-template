@@ -5,6 +5,7 @@ RUN apt-get update
 WORKDIR /usr/src/app
 COPY package.json ./
 COPY yarn.lock ./
+COPY .yarnrc ./
 RUN yarn install
 COPY . .
 RUN yarn build
