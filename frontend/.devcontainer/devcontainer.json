@@ -1,0 +1,14 @@
+{
+	"name": "Frontend",
+	"context": "..",
+	"dockerFile": "Dockerfile",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"Vue.volar",
+				"dbaeumer.vscode-eslint",
+				"ms-vscode.vscode-typescript-next"
+			]
+		}
+	}
+}
